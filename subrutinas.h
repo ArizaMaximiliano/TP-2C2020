@@ -21,8 +21,6 @@ typedef struct diccionario{
     int cant_busquedas;
 }diccionario;
 
-diccionario lista[LONGITUD_LISTA];
-
 //FUNCIONES/SUBRUTINAS***********************************************
 short MENU(diccionario lista[]){
     short flag;
@@ -149,8 +147,82 @@ void TRADUCIR(diccionario lista[], short idioma){
     }
 };
 
-void AGREGAR(char palabra[],diccionario lista[], short idioma){
-    
+int AGREGAR(char palabra[], diccionario lista[], short idioma, int puntero){    //Devuleve el puntero actualizado
+    char traduccion[LONGITUD_PALABRA];
+    char seleccion = 'N';
+    if(puntero<LONGITUD_LISTA){
+        while (seleccion == 'N'){
+            if (idioma == ESPANOL){
+                printf("Ingresar la traduccion al español\v\n");
+            }else{
+                printf("Ingresar la traduccion al ingles\v\n");
+            }
+            scanf(" %s", &traduccion);
+            printf("%cLa traduccion de %s es %s? (Y/N)\v\n", '¿',palabra, traduccion);
+            scanf(" %c", &seleccion);
+            toupper(seleccion);
+            while (seleccion != 'Y' && seleccion != 'N'){
+                printf("Ingrese una opcion correcta\v\n");
+                scanf(" %c", &seleccion);
+                toupper(seleccion);
+            }
+            if (idioma == ESPANOL){
+                strcpy(lista[puntero+1].ingles, palabra);
+                strcpy(lista[puntero+1].espanol, traduccion);
+                lista[puntero+1].cant_busquedas = 0;
+            }else{
+                strcpy(lista[puntero+1].espanol, palabra);
+                strcpy(lista[puntero+1].ingles, traduccion);
+                lista[puntero+1].cant_busquedas = 0;
+            }
+        }
+    }else{
+        printf("Se alcanzo el tope del diccionario, no se pueden agregar mas palabras!\v\n");  
+    }
+    return puntero+1;
 };
+
+void ORDENAR_ALFABETICAMENTE(diccionario lista[], int puntero){  //Ordena la estructura, luego al finalizar, se sobreescribe el archivo
+    int  j;
+    short flag;
+    diccionario aux;
+
+    for (int i = 1; i<puntero; i++){
+        aux = lista[i];
+        j = i-1;
+        flag = 1;
+        while (flag && j>0){
+            if (strcmp(aux.espanol, lista[j].espanol)<0){
+                lista[j+1] = lista[j];
+                j--;
+            }else{
+                flag = 0;
+            }
+        }
+        lista[j+1] = aux;
+    }
+};
+
+int INICIAR(diccionario lista[]){   //Devulve la cantidad de palabras del archivo
+    int puntero = 0;
+    FILE *diccionario;
+    lista = fopen("espaingl.txt","r");
+    while (!feof(lista)){
+        fscanf(diccionario, "%s %s %d", lista[puntero].espanol, lista[puntero].ingles, &lista[puntero].cant_busquedas);
+        puntero++;
+    }
+    fclose(lista);
+    return puntero;
+};
+
+void FINALIZAR(diccionario lista[], int puntero1, int puntero2){  //puntero1 = puntero donde termina el archivo  puntero2 = puntero dondeva a terminar el archivo luego del agregado de palabras
+    FILE *diccionario;
+    diccionario = fopen("espaingl.txt","a");
+    for (int i = puntero1; i<=puntero2; i++){
+        fprintf(diccionario, "%s %s %d\n", lista[puntero1].espanol, lista[puntero1].ingles, &lista[puntero1].cant_busquedas);
+    }
+    fclose(lista);
+};
+
 #endif
 //*******************************************************************
