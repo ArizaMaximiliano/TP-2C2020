@@ -6,7 +6,6 @@
 int main (void){
     short retorno = 0;
     int puntero;
-    diccionario listado[LONGITUD_LISTA];
     puntero = INICIAR(listado);
     for (int i = 0; i < puntero; i++){
         printf("%s %s %d\n", listado[i].espanol, listado[i].ingles, listado[i].cant_busquedas);
