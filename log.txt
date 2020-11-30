@@ -18,3 +18,10 @@
 	|	Funcion FINALIZAR
 	|	Funcion ORDENAR_ALFABETICAMENTE
 	|	Funcion AGREGAR
+
+	Problemas: 
+		Funcion BUSCAR, especificamente buscar en español
+		Error al seleccion volver en los menus
+		Necesitamos modificar la funcion traducir para que muestre multiples traducciones
+		Necesitamos modificar el archivo/estructura para que las palabras esten bien formateadas, es decir, con mayuscula al principio
+		Necesitamos añadir la funcion MOSTRAR MAYORES
