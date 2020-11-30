@@ -1,0 +1,20 @@
+25/11	Creado el archivo
+
+26/11	Añadido: 
+	|	Funcion Menu
+	|	Funciones para los submenus
+
+27/11	Añadido:
+	|	Funcion submenu universar
+	Removido:
+	|	Funciones para los submenues
+
+29/11	Añadido:
+	|	Funcion BUSCAR
+	|	Funcion TRADUCIR
+
+30/11	Añadido:
+	|	Funcion INICIAR
+	|	Funcion FINALIZAR
+	|	Funcion ORDENAR_ALFABETICAMENTE
+	|	Funcion AGREGAR
