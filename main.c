@@ -1,10 +1,20 @@
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 #include "subrutinas.h"
 
 int main (void){
-    short return_0 = 0;
-    while(!return_0){
-        return_0 = menu();
+    short retorno = 0;
+    int puntero;
+    diccionario listado[LONGITUD_LISTA];
+    puntero = INICIAR(listado);
+    for (int i = 0; i < puntero; i++){
+        printf("%s %s %d\n", listado[i].espanol, listado[i].ingles, listado[i].cant_busquedas);
     }
+    while(!retorno){
+        retorno = MENU(listado, puntero);
+    }
+    FINALIZAR(listado, puntero);
+    scanf(" %d", &puntero);
     return 0;
 }
