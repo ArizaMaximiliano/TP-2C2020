@@ -21,5 +21,5 @@
 
 	Problemas:
 		Necesitamos modificar la funcion traducir para que muestre multiples traducciones
-		Necesitamos modificar el archivo/estructura para que las palabras esten bien formateadas, es decir, con mayuscula al principio
+		Necesitamos ver el problema con los acentos
 		Necesitamos añadir la funcion MOSTRAR MAYORES

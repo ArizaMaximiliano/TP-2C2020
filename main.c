@@ -4,7 +4,6 @@
 #include "subrutinas.h"
 
 int main (void){
-    short retorno = 0;
     int puntero;
     puntero = INICIAR(listado);
     while(MENU(listado, puntero));
