@@ -7,10 +7,7 @@ int main (void){
     short retorno = 0;
     int puntero;
     puntero = INICIAR(listado);
-    while(!retorno){
-        retorno = MENU(listado, puntero);
-    }
+    while(MENU(listado, puntero));
     FINALIZAR(listado, puntero);
-    scanf(" %d", &puntero);
     return 0;
 }

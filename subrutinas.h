@@ -1,12 +1,12 @@
 #ifndef SUBRUTINAS_H
 #define SUBRUTINAS_H
 
-//LIBRERIAS**********************************************************
+//LIBRERIAS*******************************************************************
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-//DEFINICIONES*******************************************************
+//DEFINICIONES****************************************************************
 #define LONGITUD_LISTA      10000
 #define LONGITUD_PALABRA    20
 #define ESPANOL     1
@@ -14,7 +14,15 @@
 #define DICOTOMICA  1
 #define SECUENCIAL  0
 
-//ESTRUCTURA DE DATOS************************************************
+//ESTRUCTURA DE DATOS*********************************************************
+
+
+/*****************************************************************************
+ * Es la estructura que permite crear la lista y tiene el siguiente formato  *
+ *                                                                           *
+ *  [palabra en español] [palabra en ingles] [cantidad de busquedas]         *
+ *                                                                           *
+ *****************************************************************************/
 typedef struct diccionario{
     char espanol[LONGITUD_PALABRA];
     char ingles[LONGITUD_PALABRA];
@@ -23,8 +31,17 @@ typedef struct diccionario{
 
 diccionario listado[LONGITUD_LISTA];
 
-//FUNCIONES/SUBRUTINAS***********************************************
+//FUNCIONES/SUBRUTINAS********************************************************
 
+
+/*****************************************************************************
+ * Funcion INICIAR(listado)                                                  *
+ *                                                                           *
+ *  Abre y lee el archivo y lo guarda en una estructura de tipo diccionario. *
+ *  La variable puntero guarda la posicion de la ultima palabra, para        *
+ *  poder tener seguimiento en las demas funciones.                          *
+ *                                                                           *
+ *****************************************************************************/
 int INICIAR(diccionario listado[]){   //Devulve la cantidad de palabras del archivo
     int puntero = 0;
     FILE *diccionario;
@@ -37,34 +54,49 @@ int INICIAR(diccionario listado[]){   //Devulve la cantidad de palabras del arch
     return puntero;
 };
 
-void FINALIZAR(diccionario listado[], int puntero){  //puntero1 = puntero donde termina el archivo  puntero2 = puntero dondeva a terminar el archivo luego del agregado de palabras
+
+/*****************************************************************************
+ * Subrutina FINALIZAR(listado, puntero)                                     *
+ *                                                                           *
+ *  Abre el archivo para guardar el listado ya ordenado. Luego cierra el     *
+ *  archivo.                                                                 *
+ *                                                                           *
+ *****************************************************************************/
+void FINALIZAR(diccionario listado[], int puntero){ 
     FILE *diccionario;
-    diccionario = fopen("espaingl.dat","a");
-    for (int i = 0; i<=puntero; i++){
-        fprintf(diccionario, "%s %s %d\n", listado[i].espanol, listado[i].ingles, &listado[i].cant_busquedas);
+    diccionario = fopen("espaingl.dat","w");
+    for (int i = 0; i<(puntero-1); i++){
+        fprintf(diccionario, "%s %s %d\n", listado[i].espanol, listado[i].ingles, listado[i].cant_busquedas);
     }
     fclose(diccionario);
 };
 
-int BUSCAR(char palabra[], diccionario listado[], short idioma){
+
+/*****************************************************************************
+ * Funcion BUSCAR(palabra, listado, puntero, idioma)                         *
+ *                                                                           *
+ *  Busca la palabra en funcion del idioma de esta. De manera secuencial si  *
+ *  es ingles, y dicotomica si es en español. Devuelve la posicion de la     *
+ *  palabra buscada.                                                         *
+ *                                                                           *
+ *****************************************************************************/
+int BUSCAR(char palabra[], diccionario listado[], int puntero, short idioma){
     int posicion;
     int i = 0;
     int min = 0;
-    int max = LONGITUD_LISTA;
+    int max = puntero;
     if (idioma == INGLES){
-        while(i<LONGITUD_LISTA && strcmp(palabra, listado[i].ingles) != 0){
+        while(i<puntero && strcmp(palabra, listado[i].ingles) != 0){
             i++;
         }
         if (strcmp(palabra, listado[i].ingles)==0){
             posicion = i;
-        }else
-        {
+        }else{
             posicion = -1;
         }
     }else{
-        /*
         i = (min+max)/2;
-        while(min<=max && strcmp(palabra, listado[i].espanol) != 0){
+        while(min<max && strcmp(palabra, listado[i].espanol) != 0){
             if(strcmp(palabra, listado[i].espanol)<0){
                 max = i-1;
             }else{
@@ -77,21 +109,18 @@ int BUSCAR(char palabra[], diccionario listado[], short idioma){
         }else{
             posicion = -1;
         }
-        */
-       while(i<LONGITUD_LISTA && strcmp(palabra, listado[i].espanol) != 0){
-            i++;
-        }
-        if (strcmp(palabra, listado[i].espanol)==0){
-            posicion = i;
-        }else
-        {
-            posicion = -1;
-        }
     }
     return posicion;  
 };
 
-void ORDENAR_ALFABETICAMENTE(diccionario listado[], int puntero){  //Ordena la estructura, luego al finalizar, se sobreescribe el archivo
+
+/*****************************************************************************
+ * Funcion ORDENAR_ALFABETICAMENTE(listado, puntero)                         *
+ *                                                                           *
+ *  Ordena la lista, la usamos cada vez que agregamos palabras.              *
+ *                                                                           *
+ *****************************************************************************/
+void ORDENAR_ALFABETICAMENTE(diccionario listado[], int puntero){
     int  j;
     short flag;
     diccionario aux;
@@ -112,7 +141,15 @@ void ORDENAR_ALFABETICAMENTE(diccionario listado[], int puntero){  //Ordena la e
     }
 };
 
-int AGREGAR(char palabra[], diccionario listado[], short idioma, int puntero){    //Devuleve el puntero actualizado
+
+/*****************************************************************************
+ * Funcion AGREGAR(palabra, listado, puntero, idioma)                        *
+ *                                                                           *
+ *  Funcion que permite agregar palabras en funcion al idioma de estas. En   *
+ *  caso de que la lista se complete,este informa la situacion y no la agrega*
+ *                                                                           *
+ *****************************************************************************/
+int AGREGAR(char palabra[], diccionario listado[], int puntero, short idioma){
     char traduccion[LONGITUD_PALABRA];
     char seleccion = 'N';
     if(puntero<LONGITUD_LISTA){
@@ -148,14 +185,26 @@ int AGREGAR(char palabra[], diccionario listado[], short idioma, int puntero){  
     return puntero+1;
 };
 
-int TRADUCIR(diccionario listado[], short idioma, int puntero){
-    int i;
+
+/*****************************************************************************
+ * Funcion TRADUCIR(listado, puntero, idioma)                                *
+ *                                                                           *
+ *  Dada una palabra y el idioma de esta, busca su posicion dentro de la     *
+ *  lista y luego muestra su traduccion, en caso de que no se encuentre      *
+ *  y el usuario quiera añadirla, llama a la funcion AGREGAR. Devuelve la    *
+ *  posicion de la ultima palabra en la lista.                               *
+ *                                                                           *
+ *****************************************************************************/
+int TRADUCIR(diccionario listado[], int puntero, short idioma){
+    int i = 0;
+    int ant;
     char seleccion;
     char palabra[LONGITUD_PALABRA];
 
     printf("Ingrese la palabra a traducir\n");
     scanf(" %s", palabra);
-    i = BUSCAR(palabra, listado, idioma);
+
+    i = BUSCAR(palabra, listado, puntero, idioma);
 
     if(i>=0){
         listado[i].cant_busquedas = listado[i].cant_busquedas + 1;
@@ -168,23 +217,33 @@ int TRADUCIR(diccionario listado[], short idioma, int puntero){
     }else{
         printf("Palabra no encontrada, ¿Desea agregarla al diccionario? (Y/N)\n");
         scanf(" %c", &seleccion);
-        toupper(seleccion);
+        seleccion = toupper(seleccion);
         while (seleccion != 'Y' && seleccion != 'N'){
             printf("Seleccione una opcion correcta!\n");
             scanf(" %c", &seleccion);
-            toupper(seleccion);
+            seleccion = toupper(seleccion);
         }
-        puntero = AGREGAR(palabra, listado, idioma, puntero);
+        if (seleccion == 'Y'){
+            puntero = AGREGAR(palabra, listado, puntero, idioma);
+        }
     }
     return puntero;
 };
 
-short SUBMENU(diccionario listado[], short idioma, int puntero){
+
+/*****************************************************************************
+ * Funcion SUBMENU(listado, puntero, idioma)                                 *
+ *                                                                           *
+ *  Genera el submenu para un determinado idioma, con las opciones           *
+ *  traducir, agregar al diccionario, mostrar las palabras msa buscadas      *
+ *  y volver al menu anterior.                                               *
+ *                                                                           *
+ *****************************************************************************/
+short SUBMENU(diccionario listado[], int puntero, short idioma){
     char seleccion;
     char seleccion2 = 'Y';
     char palabra[LONGITUD_PALABRA];
     short retorno;
-    short flag;
     if(idioma == INGLES){
         printf("\t\tINGLES A ESPAÑOL\n");
     }else{
@@ -201,7 +260,7 @@ short SUBMENU(diccionario listado[], short idioma, int puntero){
 
     switch (seleccion){
     case 'T':
-        puntero = TRADUCIR(listado,idioma,puntero);
+        puntero = TRADUCIR(listado, puntero, idioma);
         retorno = 1;
         break;
     
@@ -209,10 +268,10 @@ short SUBMENU(diccionario listado[], short idioma, int puntero){
         while (seleccion2 == 'Y'){
             printf("Ingrese la palabra a agregar\n");
             scanf(" %s", palabra);
-            if(BUSCAR(palabra, listado, idioma)>=0){
+            if(BUSCAR(palabra, listado, puntero, idioma)>=0){
                 printf("La palabra buscada ya existe!\n");
             }else{
-                puntero = AGREGAR(palabra, listado, idioma, puntero);
+                puntero = AGREGAR(palabra, listado, puntero, idioma);
             }
             printf("¿Desea agregar otra palabra distinta? (Y/N)");
             scanf(" %c", &seleccion2);
@@ -243,6 +302,14 @@ short SUBMENU(diccionario listado[], short idioma, int puntero){
     return retorno;
 };
 
+
+/*****************************************************************************
+ * Subrutina MENU(listado, puntero)                                          *
+ *                                                                           *
+ *  Genera el menu principal, con las opciones,traducir del ingles al español*
+ *  traducir del español al ingles y la opcion volver.                       *
+ *                                                                           *
+ *****************************************************************************/
 short MENU(diccionario listado[], int puntero){
     short flag;
     int seleccion;
@@ -254,12 +321,12 @@ short MENU(diccionario listado[], int puntero){
     }
     switch (seleccion){
     case 1:
-        while(SUBMENU(listado, INGLES, puntero));//Ingles a español//
+        while(SUBMENU(listado, puntero, INGLES));//Ingles a español//
         flag = 1;
         break;
     
     case 2:
-        while(SUBMENU(listado, ESPANOL, puntero));//Español a ingles//
+        while(SUBMENU(listado, puntero, ESPANOL));//Español a ingles//
         flag = 1;
         break;
 
@@ -275,4 +342,4 @@ short MENU(diccionario listado[], int puntero){
 };
 
 #endif
-//*******************************************************************
+//****************************************************************************
