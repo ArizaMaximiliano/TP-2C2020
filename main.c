@@ -6,7 +6,7 @@
 int main (void){
     int puntero;
     puntero = INICIAR(listado);
-    while(MENU(listado, puntero));
+    while (MENU(listado, puntero));
     FINALIZAR(listado, puntero);
     return 0;
 }
