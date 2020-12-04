@@ -1,10 +1,10 @@
 25/11	Creado el archivo
 
-26/11	Añadido: 
+26/11	AÃ±adido: 
 	|	Funcion Menu
 	|	Funciones para los submenus
 
-27/11	Añadido:
+27/11	AÃ±adido:
 	|	Funcion submenu universar
 	Removido:
 	|	Funciones para los submenues
@@ -22,4 +22,3 @@
 	Problemas:
 		Necesitamos modificar la funcion traducir para que muestre multiples traducciones
 		Necesitamos ver el problema con los acentos
-		Necesitamos añadir la funcion MOSTRAR MAYORES
